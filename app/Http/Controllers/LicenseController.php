@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\License;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class LicenseController extends Controller
@@ -69,4 +70,5 @@ class LicenseController extends Controller
         $license->delete();
         return response()->json(null, 204);
     }
+
 }
