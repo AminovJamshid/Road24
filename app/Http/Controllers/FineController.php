@@ -8,16 +8,21 @@ use Illuminate\Support\Facades\Validator;
 
 class FineController extends Controller
 {
+    // Barcha jarimalarni olish
     public function index()
     {
         return Fine::all();
     }
 
+    // Yangi jarima yaratish
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'plate_number' => 'required|integer',
             'amount' => 'required|numeric|min:0',
-            'reason' => 'required|string|max:255',
+            'date' => 'required|date',
+            'type_id' => 'required|exists:types,id',
+            'car_id' => 'required|exists:cars,id',
         ]);
 
         if ($validator->fails()) {
@@ -28,17 +33,22 @@ class FineController extends Controller
         return response()->json($fine, 201);
     }
 
+    // Bitta jarimani ko'rish
     public function show($id)
     {
         $fine = Fine::findOrFail($id);
         return response()->json($fine);
     }
 
+    // Jarimani yangilash
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
+            'plate_number' => 'integer',
             'amount' => 'numeric|min:0',
-            'reason' => 'string|max:255',
+            'date' => 'date',
+            'type_id' => 'exists:types,id',
+            'car_id' => 'exists:cars,id',
         ]);
 
         if ($validator->fails()) {
@@ -50,6 +60,7 @@ class FineController extends Controller
         return response()->json($fine);
     }
 
+    // Jarimani o'chirish
     public function destroy($id)
     {
         $fine = Fine::findOrFail($id);
